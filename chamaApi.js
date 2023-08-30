@@ -143,8 +143,8 @@ function atualizarUsuario(idUsuario) {
     .then(response => {
         $('#editarUsuario').modal('show');
 
-        const nome = document.getElementById('nome');
-        nome.innerHTML = "oi";
+        const nome = document.getElementById('nomeEditar');
+        nome.innerHTML = "oiie";
       
 
         
