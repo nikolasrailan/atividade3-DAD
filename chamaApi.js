@@ -1,6 +1,7 @@
 // Obtém uma referência ao elemento da tabela onde os personagens serão exibidos.
 const corpoTabelaPersonagens = document.getElementById('corpoTabelaPersonagens');
 
+let usuario;
 // Função que busca os dados da API e preenche a tabela com os usuarios.
 
 function buscarDadosEPreencherTabela() {
@@ -142,12 +143,18 @@ function atualizarUsuario(idUsuario) {
     axios.get(`http://infopguaifpr.com.br:3052/pegarUsuarioPeloId/${idUsuario}`)
     .then(response => {
         $('#editarUsuario').modal('show');
+        usuario = response.data.usuario;
 
-        const nome = document.getElementById('nomeEditar');
-        nome.innerHTML = "oiie";
-      
+        const nome = document.querySelector('#nomeEditar');
+        nome.value = usuario.nome;
 
+        const email = document.querySelector('#emailEditar');
+        email.value = usuario.email;
         
+        const disciplina = document.querySelector('#disciplinaEditar');
+        disciplina.value = usuario.disciplina;
+
+
     })
     .catch(error => {
         // Em caso de erro, exibe uma mensagem de erro no console.
@@ -162,3 +169,32 @@ document.addEventListener('click', function (event) {
     }
 });
 
+
+
+document.addEventListener('click', function (event) {
+    if(event.target && event.target.classList.contains('btnEditarUsuario')) {
+        const usuario = event.target.dataset;
+        console.log(usuario);
+        editarUsuario(usuario);
+    }
+});
+// function editarUsuario(usuario) {
+    
+//     axios.post(`http://infopguaifpr.com.br:3052/atualizarUsuario/${usuario.id}`, novoUsuario, {
+//         headers: {
+//             'Content-Type': 'application/json'
+//         }
+//     })
+//     .then(response => {
+//         console.log('Usuario cadastrado', response.data);
+
+//         $('#cadastrarUsuario').modal('hide');
+
+//         alert('Usuario cadastrado com sucesso')
+
+//         buscarDadosEPreencherTabela();
+//     })
+//     .catch(error => {
+//         alert('Erro ao cadastrar', error);
+//     });
+// }
