@@ -80,22 +80,32 @@ botaoChamarAPI.addEventListener('click', () => {
 
 });
 
-function deletarUsuario(idUsuario){
-    axios.delete(`http://infopguaifpr.com.br:3052/deletarUsuario:${idUsuario}`)
-    .then(response => {
-        console.log('Usuario excluido com sucesso');
-        buscarDadosEPreencherTabela();
-    }).catch(error => {
-        console.error('Erro ao deletar:', error);
-    });
-}
-
 document.addEventListener('click', function (event) {
     if(event.target && event.target.classList.contains('btn-delete')) {
         const idUsuario = event.target.dataset.id;
         deletarUsuario(idUsuario);
     }
 });
+
+function deletarUsuario(idUsuario){
+    $('#modalDeletar').modal('show');
+
+    document.addEventListener('click', function (event) {
+        if(event.target && event.target.classList.contains('btn-delete')) {
+            axios.delete(`http://infopguaifpr.com.br:3052/deletarUsuario/${idUsuario}`)
+    .then(response => {
+        console.log('Usuario excluido com sucesso');
+        $('#modalDeletar').modal('hide');
+
+        buscarDadosEPreencherTabela();
+    }).catch(error => {
+        console.error('Erro ao deletar:', error);
+    });
+        }
+    });
+
+    
+}
 
 function cadastrarUsuario(nome, email, disciplina, senha) {
     console.log('Dados capturados');
