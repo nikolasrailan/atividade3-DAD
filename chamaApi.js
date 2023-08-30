@@ -129,8 +129,8 @@ function cadastrarUsuario(nome, email, disciplina, senha) {
         alert('Erro ao cadastrar', error);
     });
 }
-
-document.querySelector('#btnCadastrarUsuario').addEventListener('click', function (){
+const btnEditar = document.querySelector('#btnCadastrarUsuario');
+btnEditar.addEventListener('click', function (){
     const nome = document.querySelector('#nome').value;
     const email = document.querySelector('#email').value;
     const disciplina = document.querySelector('#disciplina').value;
@@ -139,7 +139,7 @@ document.querySelector('#btnCadastrarUsuario').addEventListener('click', functio
     cadastrarUsuario(nome, email, disciplina, senha);
 });
 
-function atualizarUsuario(idUsuario) {
+function carregaModal(idUsuario) {
     axios.get(`http://infopguaifpr.com.br:3052/pegarUsuarioPeloId/${idUsuario}`)
     .then(response => {
         $('#editarUsuario').modal('show');
@@ -153,8 +153,6 @@ function atualizarUsuario(idUsuario) {
         
         const disciplina = document.querySelector('#disciplinaEditar');
         disciplina.value = usuario.disciplina;
-
-
     })
     .catch(error => {
         // Em caso de erro, exibe uma mensagem de erro no console.
@@ -162,39 +160,48 @@ function atualizarUsuario(idUsuario) {
     });
 }
 
+
 document.addEventListener('click', function (event) {
     if(event.target && event.target.classList.contains('btn-edit')) {
         const idUsuario = event.target.dataset.id;
-        atualizarUsuario(idUsuario);
+        carregaModal(idUsuario);
     }
 });
 
 
 
-document.addEventListener('click', function (event) {
-    if(event.target && event.target.classList.contains('btnEditarUsuario')) {
-        const usuario = event.target.dataset;
-        console.log(usuario);
-        editarUsuario(usuario);
-    }
-});
-// function editarUsuario(usuario) {
+document.querySelector('#btnEditarUsuario').addEventListener('click', function () {
+   
+    const nome = document.querySelector("#nomeEditar").value;
+    const email = document.querySelector("#emailEditar").value;
+    const disciplina = document.querySelector("#disciplinaEditar").value;
+    editarUsuario(usuario, nome, email, disciplina);
     
-//     axios.post(`http://infopguaifpr.com.br:3052/atualizarUsuario/${usuario.id}`, novoUsuario, {
-//         headers: {
-//             'Content-Type': 'application/json'
-//         }
-//     })
-//     .then(response => {
-//         console.log('Usuario cadastrado', response.data);
+});
 
-//         $('#cadastrarUsuario').modal('hide');
+function editarUsuario(u, nome, email, disciplina) {
+    u.nome = nome;
+    u.email= email;
+    u.disciplina = disciplina;
 
-//         alert('Usuario cadastrado com sucesso')
+    axios.put(`http://infopguaifpr.com.br:3052/atualizarUsuario/${u.id}`, u, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        
 
-//         buscarDadosEPreencherTabela();
-//     })
-//     .catch(error => {
-//         alert('Erro ao cadastrar', error);
-//     });
-// }
+        console.log("Usuario editado com sucesso", response.data);
+
+        $('#editarUsuario').modal('hide');
+
+        //alert('Usuario editado com sucesso');
+
+        buscarDadosEPreencherTabela();
+
+    })
+    .catch(error => {
+        alert('Erro ao cadastrar', error);
+    });
+}
