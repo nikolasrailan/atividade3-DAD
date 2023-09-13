@@ -6,7 +6,7 @@ let usuario;
 
 function buscarDadosEPreencherTabela() {
     // Faz uma requisição GET para a API.
-    axios.get('http://infopguaifpr.com.br:3052/listarTodosUsuarios')
+    axios.get('http://localhost:3000/listarTodosUsuarios')
         .then(response => {
             console.log(response)
 
@@ -92,7 +92,7 @@ function deletarUsuario(idUsuario){
 
     document.addEventListener('click', function (event) {
         if(event.target && event.target.classList.contains('btn-delete')) {
-            axios.delete(`http://infopguaifpr.com.br:3052/deletarUsuario/${idUsuario}`)
+            axios.delete(`http://localhost:3000/deletarUsuario/${idUsuario}`)
     .then(response => {
         console.log('Usuario excluido com sucesso');
         $('#modalDeletar').modal('hide');
@@ -103,7 +103,6 @@ function deletarUsuario(idUsuario){
     });
         }
     });
-
     
 }
 
@@ -121,7 +120,7 @@ function cadastrarUsuario(nome, email, disciplina, senha) {
         senha: senha
     };
 
-    axios.post('http://infopguaifpr.com.br:3052/cadastrarUsuario', novoUsuario, {
+    axios.post('http://localhost:3000/cadastrarUsuario', novoUsuario, {
         headers: {
             'Content-Type': 'application/json'
         }
@@ -150,7 +149,7 @@ btnEditar.addEventListener('click', function (){
 });
 
 function carregaModal(idUsuario) {
-    axios.get(`http://infopguaifpr.com.br:3052/pegarUsuarioPeloId/${idUsuario}`)
+    axios.get(`http://localhost:3000/pegarUsuarioPeloId/${idUsuario}`)
     .then(response => {
         $('#editarUsuario').modal('show');
         usuario = response.data.usuario;
@@ -194,7 +193,7 @@ function editarUsuario(u, nome, email, disciplina) {
     u.email= email;
     u.disciplina = disciplina;
 
-    axios.put(`http://infopguaifpr.com.br:3052/atualizarUsuario/${u.id}`, u, {
+    axios.put(`http://localhost:3000/atualizarUsuario/${u.id}`, u, {
         headers: {
             'Content-Type': 'application/json'
         }
